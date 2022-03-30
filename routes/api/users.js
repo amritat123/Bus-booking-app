@@ -1,8 +1,20 @@
 const express = require('express');
 const router = express.Router();
+// const { check , validationResult } = require('express-valid/check');
 
-// routes Get api/users
-//@desc Test api
+// routes post api/users
+//@desc Register user
 // @access public
-router.get('/', (req,res) => res.send('User route'));
+router.post(
+    // '/',
+    // [
+    // check('name' , 'Name is required')
+    //     .not
+    //     .isEmpty()
+    // ],
+    (req,res) => {
+        console.log(req.body);
+        res.send('User route');
+    }
+);
 module.exports = router;
