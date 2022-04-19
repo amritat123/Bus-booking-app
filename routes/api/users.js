@@ -21,13 +21,22 @@ router.post(
         'email', 'Please include a valid email')
     .isEmail(),
 
+    check(
+        'gender' , 'gender is requird')
+    .isGender(),
+
+    check(
+        'phone' , 'phone is required')
+    .not()
+    .isEmpty()
+    
+
     //Checking password length. it should not more than 6 digits
     check(
         'password','Please enter a password with 6 or more characters')
         .isLength({ min: 6})
 ],
     async (req, res) => {
-
         // set errors and validationresult which takes in the request
         const errors = validationResult(req);  
 
@@ -39,7 +48,7 @@ router.post(
         }
 
         //pulling name email & pw from req.body
-        const { name, email, password} = req.body;  
+        const { name, email, password , dob, phone, gender, booking ,address } = req.body;  
 
     try {
     // see if user exists
@@ -51,24 +60,19 @@ router.post(
             res.status (400)
             .json({errors: [ { msg: 'User already exists'}]});
         }
-
-    //Get users gravatar
-    const avatar = gravatar.url(email, {    
-        s: '200',  // default size
-        r: 'pg',   // rating
-        d: 'mm'    //default
-    });
-
     //user which is created above and set tat to new User
     user = new User({  
         name,
         email,
-        avatar,
-        password
+        dob,
+        password,
+        phone,
+        address,
+        gender,
+        booking
     });
 
     // Encrypt password
-
     // salt is a variable , 10 ia weight(round) more we use pw will be secure more
     // salt ia a key used to excrpt our data, here we give password.
     const salt = await bcrypt.genSalt(10);    
@@ -103,6 +107,6 @@ router.post(
      }
 }
 );
-
 module.exports = router;
+
 
